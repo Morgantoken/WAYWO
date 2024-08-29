@@ -1,0 +1,37 @@
+model Message {
+    fields {
+        message Text
+    }
+
+    actions {
+        create createMessage() with (message)
+        list listMessages()
+        update updateMessage(id)
+        get getMessage(id)
+        delete deleteMessage(id)
+    }
+
+    @permission(
+        actions: [create, list, get, update, delete],
+        expression: true
+    )
+}
+
+model Spam {
+    fields {
+        from Text
+        message Text
+        flagged Boolean
+    }
+
+    actions {
+        write plain(Any) returns (Any) {
+            @permission(expression: true)
+        }
+    }
+}
+
+job Waywo {
+    @schedule("15 14 * * 1-5")
+    @permission(expression: true)
+}
